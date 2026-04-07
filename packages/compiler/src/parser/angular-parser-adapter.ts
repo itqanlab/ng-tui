@@ -55,8 +55,10 @@ export class AngularParserAdapter implements TemplateParser {
   }
 
   private transformNode(node: any): TNode | null {
+    const kind = node.constructor?.name?.toLowerCase() || node.type;
+
     // Text node
-    if (node.type === 'text') {
+    if (kind === 'text') {
       const value = node.value as string;
 
       // Check for interpolations
@@ -76,7 +78,7 @@ export class AngularParserAdapter implements TemplateParser {
     }
 
     // Element node
-    if (node.type === 'element') {
+    if (kind === 'element') {
       return this.transformElement(node);
     }
 

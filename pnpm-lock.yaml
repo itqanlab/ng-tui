@@ -24,6 +24,24 @@ importers:
         specifier: ^3.1.3
         version: 3.2.4(@types/node@25.5.2)(yaml@2.8.3)
 
+  apps/demo:
+    dependencies:
+      '@ng-tui/common':
+        specifier: workspace:*
+        version: link:../../packages/common
+      '@ng-tui/compiler':
+        specifier: workspace:*
+        version: link:../../packages/compiler
+      '@ng-tui/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ng-tui/platform-terminal':
+        specifier: workspace:*
+        version: link:../../packages/platform-terminal
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+
   apps/docs:
     devDependencies:
       vitepress:
@@ -84,6 +102,9 @@ importers:
 
   packages/platform-terminal:
     dependencies:
+      '@ng-tui/common':
+        specifier: workspace:*
+        version: link:../common
       '@ng-tui/compiler':
         specifier: workspace:*
         version: link:../compiler

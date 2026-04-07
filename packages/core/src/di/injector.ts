@@ -114,14 +114,20 @@ export class Injector {
     const paramTypes = getParamTypes(target);
     const injectTokens = getInjectTokens(target);
 
-    const deps = paramTypes.map((type: any, index: number) => {
-      // Use explicit @Inject token if available, otherwise use the type
-      const token = injectTokens.get(index) || type;
+    // Determine the number of constructor parameters.
+    // When emitDecoratorMetadata is unavailable (e.g. esbuild/tsx), paramTypes
+    // may be empty even though @Inject tokens exist. Use the larger count.
+    const paramCount = Math.max(paramTypes.length, target.length, injectTokens.size > 0 ? Math.max(...injectTokens.keys()) + 1 : 0);
+
+    const deps = [];
+    for (let index = 0; index < paramCount; index++) {
+      // Use explicit @Inject token if available, otherwise use the reflected type
+      const token = injectTokens.get(index) || paramTypes[index];
       if (!token) {
         throw new NullInjectorError(`parameter at index ${index} of ${target.name}`);
       }
-      return this.resolve(token);
-    });
+      deps.push(this.resolve(token));
+    }
 
     return new target(...deps);
   }

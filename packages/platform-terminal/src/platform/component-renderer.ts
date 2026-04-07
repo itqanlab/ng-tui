@@ -333,6 +333,43 @@ export class ComponentRenderer {
       }
     }
 
+    // Auto-size leaf widgets based on content
+    if (node.name === 'text') {
+      const content = widgetProps.content || '';
+      if (layoutProps.height === undefined) {
+        layoutProps.height = Math.max(1, content.split('\n').length);
+      }
+      if (layoutProps.width === undefined) {
+        const lines = content.split('\n');
+        const maxLineLen = Math.max(...lines.map((l: string) => l.length));
+        if (maxLineLen > 0) layoutProps.width = maxLineLen;
+      }
+    } else if (node.name === 'spinner') {
+      if (layoutProps.height === undefined) layoutProps.height = 1;
+      if (layoutProps.width === undefined) {
+        const text = widgetProps.text || '';
+        layoutProps.width = 2 + text.length; // spinner char + space + text
+      }
+    } else if (node.name === 'progress' || node.name === 'input') {
+      if (layoutProps.height === undefined) layoutProps.height = 1;
+    }
+
+    // Boxes with borders need padding to prevent content overlap
+    if (node.name === 'box' && widgetProps.borderStyle && widgetProps.borderStyle !== 'none') {
+      if (layoutProps.paddingTop === undefined && layoutProps.padding === undefined) {
+        layoutProps.paddingTop = (layoutProps.paddingTop as number | undefined) ?? 1;
+      }
+      if (layoutProps.paddingBottom === undefined && layoutProps.padding === undefined) {
+        layoutProps.paddingBottom = (layoutProps.paddingBottom as number | undefined) ?? 1;
+      }
+      if (layoutProps.paddingLeft === undefined && layoutProps.padding === undefined) {
+        layoutProps.paddingLeft = (layoutProps.paddingLeft as number | undefined) ?? 1;
+      }
+      if (layoutProps.paddingRight === undefined && layoutProps.padding === undefined) {
+        layoutProps.paddingRight = (layoutProps.paddingRight as number | undefined) ?? 1;
+      }
+    }
+
     return {
       id: this.nextId(),
       props: layoutProps,
@@ -556,11 +593,11 @@ export class ComponentRenderer {
   }
 }
 
-function toNumber(value: any): number | undefined {
+function toNumber(value: any): number | string | undefined {
   if (typeof value === 'number') return value;
   if (typeof value === 'string') {
-    // Handle percentage strings like '100%'
-    if (value.endsWith('%')) return undefined;
+    // Pass percentage strings through for Yoga to handle
+    if (value.endsWith('%')) return value;
     const num = Number(value);
     return Number.isNaN(num) ? undefined : num;
   }
