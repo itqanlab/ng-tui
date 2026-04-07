@@ -1,0 +1,13 @@
+{
+  "name": "@ng-tui/demo",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "reflect-metadata": "^0.2.2",
+    "@ng-tui/core": "workspace:*",
+    "@ng-tui/common": "workspace:*",
+    "@ng-tui/compiler": "workspace:*",
+    "@ng-tui/platform-terminal": "workspace:*"
+  }
+}

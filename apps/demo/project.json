@@ -1,0 +1,15 @@
+{
+  "name": "demo",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/demo/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "dependsOn": ["^build"],
+      "command": "npx tsx src/main.ts",
+      "options": {
+        "cwd": "apps/demo"
+      }
+    }
+  }
+}
