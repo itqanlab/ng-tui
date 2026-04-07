@@ -86,6 +86,12 @@ const LAYOUT_PROP_NAMES = new Set([
   'marginBottom',
   'marginLeft',
   'gap',
+  'position',
+  'positionTop',
+  'positionRight',
+  'positionBottom',
+  'positionLeft',
+  'overflow',
 ]);
 
 const NUMERIC_LAYOUT_PROPS = new Set([
@@ -108,6 +114,10 @@ const NUMERIC_LAYOUT_PROPS = new Set([
   'marginBottom',
   'marginLeft',
   'gap',
+  'positionTop',
+  'positionRight',
+  'positionBottom',
+  'positionLeft',
 ]);
 
 /**
@@ -529,13 +539,21 @@ export class ComponentRenderer {
       case 'box':
         renderBox(buffer, layout, props);
         break;
-      case 'text':
+      case 'text': {
+        const textStyle: Record<string, any> = props.style ? { ...props.style } : {};
+        if (props.fg) textStyle.fg = props.fg;
+        if (props.bg) textStyle.bg = props.bg;
+        if (props.bold) textStyle.bold = true;
+        if (props.dim) textStyle.dim = true;
+        if (props.italic) textStyle.italic = true;
+        if (props.underline) textStyle.underline = true;
         renderText(buffer, layout, {
           content: props.content || '',
-          style: props.style,
+          style: Object.keys(textStyle).length > 0 ? textStyle : undefined,
           textAlign: props.textAlign,
         });
         break;
+      }
       case 'input':
         renderInput(buffer, layout, props);
         break;

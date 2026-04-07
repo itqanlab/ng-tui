@@ -5,7 +5,13 @@ export interface LayoutProps {
   width?: number | string;
   height?: number | string;
   flexDirection?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
-  justifyContent?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
+  justifyContent?:
+    | 'flex-start'
+    | 'center'
+    | 'flex-end'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly';
   alignItems?: 'flex-start' | 'center' | 'flex-end' | 'stretch';
   alignSelf?: 'auto' | 'flex-start' | 'center' | 'flex-end' | 'stretch';
   flexGrow?: number;
@@ -26,4 +32,10 @@ export interface LayoutProps {
   maxWidth?: number;
   maxHeight?: number;
   gap?: number;
+  position?: 'relative' | 'absolute';
+  positionTop?: number;
+  positionRight?: number;
+  positionBottom?: number;
+  positionLeft?: number;
+  overflow?: 'visible' | 'hidden' | 'scroll';
 }

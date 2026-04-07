@@ -1,0 +1,14 @@
+{
+  "name": "opencode-demo",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/opencode-demo/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "command": "npx tsx src/main.ts",
+      "options": {
+        "cwd": "apps/opencode-demo"
+      }
+    }
+  }
+}

@@ -51,6 +51,24 @@ importers:
         specifier: ^3.5.13
         version: 3.5.32(typescript@5.9.3)
 
+  apps/opencode-demo:
+    dependencies:
+      '@ng-tui/common':
+        specifier: workspace:*
+        version: link:../../packages/common
+      '@ng-tui/compiler':
+        specifier: workspace:*
+        version: link:../../packages/compiler
+      '@ng-tui/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ng-tui/platform-terminal':
+        specifier: workspace:*
+        version: link:../../packages/platform-terminal
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
+
   packages/cli:
     dependencies:
       '@ng-tui/common':
