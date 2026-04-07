@@ -13,7 +13,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/introduction' },
       { text: 'API', link: '/api/core' },
-      { text: 'Examples', link: '/examples/ai-chat' },
+      { text: 'Examples', link: '/examples/counter' },
     ],
 
     sidebar: {
@@ -25,19 +25,46 @@ export default defineConfig({
             { text: 'Quick Start', link: '/guide/quick-start' },
           ],
         },
+        {
+          text: 'Essentials',
+          items: [
+            { text: 'Components', link: '/guide/components' },
+            { text: 'Template Syntax', link: '/guide/templates' },
+            { text: 'Signals & Reactivity', link: '/guide/signals' },
+            { text: 'Dependency Injection', link: '/guide/dependency-injection' },
+            { text: 'Lifecycle Hooks', link: '/guide/lifecycle-hooks' },
+          ],
+        },
+        {
+          text: 'Features',
+          items: [
+            { text: 'Directives & Pipes', link: '/guide/directives-pipes' },
+            { text: 'Widgets & Layout', link: '/guide/widgets' },
+            { text: 'Screen Navigation', link: '/guide/navigation' },
+          ],
+        },
       ],
       '/api/': [
         {
           text: 'API Reference',
           items: [
             { text: '@ng-tui/core', link: '/api/core' },
+            { text: '@ng-tui/common', link: '/api/common' },
+            { text: '@ng-tui/compiler', link: '/api/compiler' },
+            { text: '@ng-tui/platform-terminal', link: '/api/platform-terminal' },
+            { text: '@ng-tui/cli', link: '/api/cli' },
           ],
         },
       ],
       '/examples/': [
         {
           text: 'Examples',
-          items: [{ text: 'AI Chat', link: '/examples/ai-chat' }],
+          items: [
+            { text: 'Counter', link: '/examples/counter' },
+            { text: 'Todo List', link: '/examples/todo-list' },
+            { text: 'Dashboard', link: '/examples/dashboard' },
+            { text: 'AI Chat', link: '/examples/ai-chat' },
+          ],
         },
       ],
     },
