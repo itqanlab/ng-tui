@@ -5,3 +5,7 @@ tmp/
 .env
 *.tsbuildinfo
 .DS_Store
+
+# VitePress
+apps/docs/.vitepress/dist/
+apps/docs/.vitepress/cache/

@@ -13,7 +13,10 @@
     "test": "nx run-many -t test",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "docs:dev": "nx dev docs",
+    "docs:build": "nx build docs",
+    "docs:preview": "nx preview docs"
   },
   "devDependencies": {
     "nx": "^21.1.2",

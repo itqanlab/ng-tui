@@ -40,6 +40,14 @@ export type { Signal, WritableSignal } from './signals/index.js';
 export { bootstrapApplication, ApplicationRef } from './application/index.js';
 export type { ApplicationConfig } from './application/index.js';
 
+// Metadata (for platform integration)
+export {
+  getComponentMetadata,
+  getInputMetadata,
+  getOutputMetadata,
+  getPipeMetadata,
+} from './di/index.js';
+
 // Types
 export { EventEmitter } from './types/index.js';
 export type { Type, ComponentDef } from './types/index.js';

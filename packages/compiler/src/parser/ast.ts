@@ -25,6 +25,7 @@ export interface TText extends TNode {
 /** Text with {{ expression }} interpolations */
 export interface TBoundText extends TNode {
   type: 'bound_text';
+  rawText: string;
   expressions: TInterpolation[];
 }
 

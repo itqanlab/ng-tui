@@ -64,6 +64,7 @@ export class AngularParserAdapter implements TemplateParser {
       if (interpolations.length > 0) {
         return {
           type: 'bound_text',
+          rawText: value,
           expressions: interpolations,
         } as TBoundText;
       }

@@ -1,6 +1,6 @@
-import { Injector } from '../di/injector.js';
+import type { Injector } from '../di/injector.js';
+import { runOnDestroy, runOnInit } from '../lifecycle/hooks.js';
 import type { Type } from '../types/type.js';
-import { runOnInit, runOnDestroy } from '../lifecycle/hooks.js';
 
 /**
  * Root application handle.
@@ -10,6 +10,7 @@ export class ApplicationRef {
   readonly injector: Injector;
   private rootInstance: any;
   private destroyed = false;
+  private tickFn: (() => void) | null = null;
 
   constructor(
     private readonly rootComponent: Type,
@@ -29,9 +30,16 @@ export class ApplicationRef {
     runOnInit(this.rootInstance);
   }
 
+  /** Register the platform's render callback */
+  onTick(fn: () => void): void {
+    this.tickFn = fn;
+  }
+
   /** Trigger a change detection cycle (re-render) */
   tick(): void {
-    // Will be connected to the renderer in platform-terminal
+    if (this.tickFn) {
+      this.tickFn();
+    }
   }
 
   /** Destroy the application — calls ngOnDestroy on root */

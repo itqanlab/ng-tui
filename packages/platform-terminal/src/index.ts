@@ -60,5 +60,14 @@ export {
   TERMINAL_CONFIG,
   emergencyCleanup,
   registerCleanupHandlers,
+  ComponentRenderer,
+  dispatchKeyEvent,
+  registerCommonPipes,
+  bootstrapTerminalApplication,
 } from './platform/index.js';
-export type { TerminalConfig } from './platform/index.js';
+export type {
+  TerminalConfig,
+  ComponentView,
+  TerminalApplicationConfig,
+  TerminalApplicationRef,
+} from './platform/index.js';

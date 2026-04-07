@@ -1,0 +1,28 @@
+{
+  "name": "docs",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/docs",
+  "projectType": "application",
+  "targets": {
+    "dev": {
+      "command": "pnpm vitepress dev",
+      "options": {
+        "cwd": "apps/docs"
+      }
+    },
+    "build": {
+      "command": "pnpm vitepress build",
+      "options": {
+        "cwd": "apps/docs"
+      },
+      "outputs": ["{projectRoot}/.vitepress/dist"],
+      "cache": true
+    },
+    "preview": {
+      "command": "pnpm vitepress preview",
+      "options": {
+        "cwd": "apps/docs"
+      }
+    }
+  }
+}
