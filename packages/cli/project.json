@@ -1,0 +1,24 @@
+{
+  "name": "@ng-tui/cli",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/cli/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "packages/cli/dist",
+        "main": "packages/cli/src/index.ts",
+        "tsConfig": "packages/cli/tsconfig.json"
+      }
+    },
+    "test": {
+      "executor": "@nx/js:node",
+      "options": {
+        "command": "vitest run",
+        "cwd": "packages/cli"
+      }
+    }
+  }
+}

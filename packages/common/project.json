@@ -1,0 +1,24 @@
+{
+  "name": "@ng-tui/common",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/common/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "packages/common/dist",
+        "main": "packages/common/src/index.ts",
+        "tsConfig": "packages/common/tsconfig.json"
+      }
+    },
+    "test": {
+      "executor": "@nx/js:node",
+      "options": {
+        "command": "vitest run",
+        "cwd": "packages/common"
+      }
+    }
+  }
+}

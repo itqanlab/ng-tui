@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022"],
+    "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "paths": {
+      "@ng-tui/core": ["packages/core/src/index.ts"],
+      "@ng-tui/common": ["packages/common/src/index.ts"],
+      "@ng-tui/compiler": ["packages/compiler/src/index.ts"],
+      "@ng-tui/platform-terminal": ["packages/platform-terminal/src/index.ts"],
+      "@ng-tui/cli": ["packages/cli/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}

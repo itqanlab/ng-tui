@@ -1,0 +1,22 @@
+{
+  "name": "@ng-tui/common",
+  "version": "0.0.1",
+  "description": "Built-in pipes, directives, and shared services",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@ng-tui/core": "workspace:*"
+  }
+}

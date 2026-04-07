@@ -1,0 +1,34 @@
+{
+  "name": "@ng-tui/platform-terminal",
+  "version": "0.0.1",
+  "description": "Terminal rendering backend: Yoga layout, ANSI renderer, widgets",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@ng-tui/compiler": "workspace:*",
+    "@ng-tui/core": "workspace:*",
+    "ansi-escapes": "^7.0.0",
+    "chalk": "^5.4.1",
+    "cli-cursor": "^5.0.0",
+    "string-width": "^7.2.0",
+    "strip-ansi": "^7.1.0",
+    "yoga-layout": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2"
+  }
+}

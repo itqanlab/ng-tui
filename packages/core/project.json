@@ -1,0 +1,24 @@
+{
+  "name": "@ng-tui/core",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/core/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "packages/core/dist",
+        "main": "packages/core/src/index.ts",
+        "tsConfig": "packages/core/tsconfig.json"
+      }
+    },
+    "test": {
+      "executor": "@nx/js:node",
+      "options": {
+        "command": "vitest run",
+        "cwd": "packages/core"
+      }
+    }
+  }
+}

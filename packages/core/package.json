@@ -1,0 +1,26 @@
+{
+  "name": "@ng-tui/core",
+  "version": "0.0.1",
+  "description": "Core framework: decorators, DI, signals, lifecycle hooks",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
+  },
+  "peerDependencies": {
+    "typescript": ">=5.0.0"
+  }
+}

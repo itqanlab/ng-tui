@@ -1,0 +1,24 @@
+{
+  "name": "@ng-tui/platform-terminal",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/platform-terminal/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "packages/platform-terminal/dist",
+        "main": "packages/platform-terminal/src/index.ts",
+        "tsConfig": "packages/platform-terminal/tsconfig.json"
+      }
+    },
+    "test": {
+      "executor": "@nx/js:node",
+      "options": {
+        "command": "vitest run",
+        "cwd": "packages/platform-terminal"
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@ng-tui/compiler",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/compiler/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "packages/compiler/dist",
+        "main": "packages/compiler/src/index.ts",
+        "tsConfig": "packages/compiler/tsconfig.json"
+      }
+    },
+    "test": {
+      "executor": "@nx/js:node",
+      "options": {
+        "command": "vitest run",
+        "cwd": "packages/compiler"
+      }
+    }
+  }
+}

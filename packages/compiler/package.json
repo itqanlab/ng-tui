@@ -1,0 +1,24 @@
+{
+  "name": "@ng-tui/compiler",
+  "version": "0.0.1",
+  "description": "Template parser, expression evaluator, and directive compiler",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@ng-tui/core": "workspace:*",
+    "angular-html-parser": "^10.4.0",
+    "jsep": "^1.4.0"
+  }
+}
