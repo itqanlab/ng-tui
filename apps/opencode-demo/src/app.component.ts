@@ -1,13 +1,27 @@
 import { Component, type OnInit, signal } from '@ng-tui/core';
 import { type ModelGroup, ModelSelectorComponent } from './components/model-selector.component.js';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 const LOGO = [
-  '  ___  _ __   ___ _ __   ___ ___   __| | ___ ',
-  " / _ \\| '_ \\ / _ \\ '_ \\ / __/ _ \\ / _` |/ _ \\",
-  '| (_) | |_) |  __/ | | | (_| (_) | (_| |  __/',
-  ' \\___/| .__/ \\___|_| |_|\\___\\___/ \\__,_|\\___|',
-  '      |_|                                     ',
+  '█▀▀█ █▀▀▄ █▀▀▀ █▀▀▄ █▀▀▀ █▀▀█ ▄▀▀█ █▀▀▀',
+  '█  █ █▄▄▀ █▀▀  █  █ █    █  █ █  █ █▀▀ ',
+  '▀▀▀▀ ▀    ▀▀▀▀ ▀  ▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀',
 ].join('\n');
+
+interface SlashCommand {
+  name: string;
+  description: string;
+}
+
+const COMMANDS: SlashCommand[] = [
+  { name: '/models', description: 'Switch model' },
+  { name: '/review', description: 'review changes [commit|branch|pr], defaults to uncommitted' },
+  { name: '/compact', description: 'Compact conversation history' },
+  { name: '/status', description: 'Show connection and session status' },
+  { name: '/help', description: 'Show available commands' },
+  { name: '/clear', description: 'Clear conversation' },
+];
 
 const MODEL_GROUPS: ModelGroup[] = [
   {
@@ -48,6 +62,18 @@ const MODEL_GROUPS: ModelGroup[] = [
   },
 ];
 
+function getGitBranch(): string {
+  try {
+    const head = readFileSync(join(process.cwd(), '.git/HEAD'), 'utf-8').trim();
+    if (head.startsWith('ref: refs/heads/')) {
+      return head.slice('ref: refs/heads/'.length);
+    }
+    return head.slice(0, 7);
+  } catch {
+    return '';
+  }
+}
+
 @Component({
   selector: 'app-root',
   components: [ModelSelectorComponent],
@@ -63,25 +89,41 @@ const MODEL_GROUPS: ModelGroup[] = [
            [alignItems]="'center'">
 
         <text [fg]="'cyan'" [dim]="true" [textAlign]="'center'"
-              [width]="48" [height]="5">{{ logo }}</text>
+              [width]="39" [height]="3">{{ logo }}</text>
 
-        <box [height]="1"></box>
+        <box [height]="2"></box>
 
         <box [flexDirection]="'column'"
              [width]="inputBoxWidth()"
-             [height]="4"
-             [borderStyle]="'rounded'"
+             [height]="inputBoxHeight()"
+             [borderStyle]="'single'"
              [borderFg]="'cyan'"
-             [paddingLeft]="1"
-             [paddingRight]="1"
+             [borderTop]="false"
+             [borderRight]="false"
+             [borderBottom]="false"
+             [bg]="'#1e3338'"
+             [paddingLeft]="2"
              [paddingTop]="0"
              [paddingBottom]="0">
+
+          <list *ngIf="showAutocomplete()"
+                [items]="autocompleteItems()"
+                [selectedIndex]="autocompleteIndex()"
+                [height]="autocompleteListHeight()"
+                [selectedStyle]="autocompleteSelectedStyle"
+                [prefix]="'  '"
+                [selectedPrefix]="'  '">
+          </list>
+
+          <box *ngIf="!showAutocomplete()" [height]="1"></box>
 
           <input [value]="inputValue()"
                  [placeholder]="placeholder"
                  [focus]="isInputFocused()"
                  [prompt]="''"
                  [height]="1" />
+
+          <box [height]="1"></box>
 
           <box [flexDirection]="'row'" [height]="1">
             <text [bold]="true" [fg]="'cyan'">{{ provider() }}</text>
@@ -93,10 +135,10 @@ const MODEL_GROUPS: ModelGroup[] = [
 
         <box [flexDirection]="'row'" [height]="1" [width]="inputBoxWidth()">
           <box [flexGrow]="1"></box>
-          <text [dim]="true" [fg]="'gray'">tab</text>
-          <text [dim]="true" [fg]="'white'"> agents  </text>
-          <text [dim]="true" [fg]="'gray'">ctrl+p</text>
-          <text [dim]="true" [fg]="'white'"> commands</text>
+          <text [bold]="true" [fg]="'white'">tab</text>
+          <text [dim]="true" [fg]="'gray'"> agents  </text>
+          <text [bold]="true" [fg]="'white'">ctrl+p</text>
+          <text [dim]="true" [fg]="'gray'"> commands</text>
         </box>
       </box>
 
@@ -124,16 +166,19 @@ const MODEL_GROUPS: ModelGroup[] = [
 })
 export class AppComponent implements OnInit {
   logo = LOGO;
-  placeholder = 'Ask anything... "What is the tech stack of this project?"';
-  version = '1.0.0';
+  placeholder = 'Ask anything... "Fix broken tests"';
+  version = '1.3.17';
   modelGroups = MODEL_GROUPS;
+  autocompleteSelectedStyle = { bg: 'cyan', fg: 'black', bold: true };
 
   private _inputValue = signal('');
-  private _currentModel = signal('Claude Opus 4.6');
+  private _currentModel = signal('GLM-4.6');
   private _provider = signal('Build');
-  private _planName = signal('Anthropic');
+  private _planName = signal('Z.AI Coding Plan');
   private _showModelSelector = signal(false);
   private _isInputFocused = signal(true);
+  private _autocompleteIndex = signal(0);
+  private _gitBranch = '';
 
   inputValue = () => this._inputValue();
   currentModel = () => this._currentModel();
@@ -141,6 +186,7 @@ export class AppComponent implements OnInit {
   planName = () => this._planName();
   showModelSelector = () => this._showModelSelector();
   isInputFocused = () => this._isInputFocused();
+  autocompleteIndex = () => this._autocompleteIndex();
 
   termWidth = () => process.stdout.columns || 80;
   termHeight = () => process.stdout.rows || 24;
@@ -150,15 +196,44 @@ export class AppComponent implements OnInit {
     return Math.min(Math.max(50, Math.floor(cols * 0.5)), cols - 4);
   };
 
+  showAutocomplete = () => {
+    const val = this._inputValue();
+    return val.startsWith('/') && val.length > 0 && !this._showModelSelector();
+  };
+
+  filteredCommands = (): SlashCommand[] => {
+    const val = this._inputValue().toLowerCase();
+    return COMMANDS.filter((cmd) => cmd.name.toLowerCase().startsWith(val));
+  };
+
+  autocompleteItems = (): string[] => {
+    return this.filteredCommands().map((cmd) => {
+      const padded = cmd.name.padEnd(14);
+      return `${padded}${cmd.description}`;
+    });
+  };
+
+  autocompleteListHeight = () => {
+    return Math.min(this.filteredCommands().length, 5);
+  };
+
+  inputBoxHeight = () => {
+    if (this.showAutocomplete()) {
+      const listH = this.autocompleteListHeight();
+      return listH + 3; // list + input + spacer + model
+    }
+    return 4; // topSpacer + input + spacer + model
+  };
+
   statusLeft = () => {
     const cwd = process.cwd();
-    return ` ${cwd} `;
+    const branch = this._gitBranch;
+    return branch ? ` ${cwd}:${branch} ` : ` ${cwd} `;
   };
 
   // Bound functions for child component callbacks
   selectModelFn = (model: string) => {
     this._currentModel.set(model);
-    // Determine provider from model name
     for (const group of MODEL_GROUPS) {
       if (group.models.includes(model)) {
         this._planName.set(group.name);
@@ -175,50 +250,81 @@ export class AppComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    // Ready
+    this._gitBranch = getGitBranch();
   }
 
   onKeypress(event: { key: string; ctrl: boolean }) {
-    // Ctrl+C to exit
     if (event.ctrl && event.key === 'c') {
       process.exit(0);
     }
 
-    // Don't handle keys when model selector is open
     if (this._showModelSelector()) {
       return;
     }
 
-    // Tab key - placeholder for agents menu
+    // Handle autocomplete navigation
+    if (this.showAutocomplete()) {
+      if (event.key === 'up') {
+        this._autocompleteIndex.update((i) => Math.max(0, i - 1));
+        return;
+      }
+      if (event.key === 'down') {
+        const max = this.filteredCommands().length - 1;
+        this._autocompleteIndex.update((i) => Math.min(max, i + 1));
+        return;
+      }
+      if (event.key === 'tab' || event.key === 'return') {
+        const cmds = this.filteredCommands();
+        const idx = this._autocompleteIndex();
+        if (cmds[idx]) {
+          const cmdName = cmds[idx].name;
+          // Execute the command
+          if (cmdName === '/models') {
+            this._inputValue.set('');
+            this._showModelSelector.set(true);
+            this._isInputFocused.set(false);
+            this._autocompleteIndex.set(0);
+            return;
+          }
+          this._inputValue.set(cmdName);
+          this._autocompleteIndex.set(0);
+        }
+        return;
+      }
+      if (event.key === 'escape') {
+        this._inputValue.set('');
+        this._autocompleteIndex.set(0);
+        return;
+      }
+    }
+
     if (event.key === 'tab') {
       return;
     }
 
-    // Enter - submit or handle slash commands
     if (event.key === 'return') {
       const val = this._inputValue().trim();
-      if (val === '/model') {
+      if (val === '/models') {
         this._inputValue.set('');
         this._showModelSelector.set(true);
         this._isInputFocused.set(false);
         return;
       }
       if (val) {
-        // Placeholder: would send to AI here
         this._inputValue.set('');
       }
       return;
     }
 
-    // Backspace
     if (event.key === 'backspace') {
       this._inputValue.update((v) => v.slice(0, -1));
+      this._autocompleteIndex.set(0);
       return;
     }
 
-    // Regular character input
     if (event.key.length === 1 && !event.ctrl) {
       this._inputValue.update((v) => v + event.key);
+      this._autocompleteIndex.set(0);
     }
   }
 }

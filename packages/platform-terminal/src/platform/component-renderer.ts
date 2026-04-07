@@ -366,17 +366,17 @@ export class ComponentRenderer {
 
     // Boxes with borders need padding to prevent content overlap
     if (node.name === 'box' && widgetProps.borderStyle && widgetProps.borderStyle !== 'none') {
-      if (layoutProps.paddingTop === undefined && layoutProps.padding === undefined) {
-        layoutProps.paddingTop = (layoutProps.paddingTop as number | undefined) ?? 1;
+      if (widgetProps.borderTop !== false && layoutProps.paddingTop === undefined && layoutProps.padding === undefined) {
+        layoutProps.paddingTop = 1;
       }
-      if (layoutProps.paddingBottom === undefined && layoutProps.padding === undefined) {
-        layoutProps.paddingBottom = (layoutProps.paddingBottom as number | undefined) ?? 1;
+      if (widgetProps.borderBottom !== false && layoutProps.paddingBottom === undefined && layoutProps.padding === undefined) {
+        layoutProps.paddingBottom = 1;
       }
-      if (layoutProps.paddingLeft === undefined && layoutProps.padding === undefined) {
-        layoutProps.paddingLeft = (layoutProps.paddingLeft as number | undefined) ?? 1;
+      if (widgetProps.borderLeft !== false && layoutProps.paddingLeft === undefined && layoutProps.padding === undefined) {
+        layoutProps.paddingLeft = 1;
       }
-      if (layoutProps.paddingRight === undefined && layoutProps.padding === undefined) {
-        layoutProps.paddingRight = (layoutProps.paddingRight as number | undefined) ?? 1;
+      if (widgetProps.borderRight !== false && layoutProps.paddingRight === undefined && layoutProps.padding === undefined) {
+        layoutProps.paddingRight = 1;
       }
     }
 

@@ -27,6 +27,10 @@ export function renderBox(
     bg?: string;
     fg?: string;
     borderFg?: string;
+    borderLeft?: boolean;
+    borderRight?: boolean;
+    borderTop?: boolean;
+    borderBottom?: boolean;
   },
 ): void {
   const { left, top, width, height } = layout;
@@ -51,38 +55,53 @@ export function renderBox(
   const hasBorderStyle = Object.keys(borderStyle).length > 0;
   const bs = hasBorderStyle ? borderStyle : undefined;
 
+  const drawTop = props.borderTop !== false;
+  const drawBottom = props.borderBottom !== false;
+  const drawLeft = props.borderLeft !== false;
+  const drawRight = props.borderRight !== false;
+
   // Top border
-  buffer.writeString(left, top, border.tl, bs);
-  for (let x = 1; x < width - 1; x++) {
-    buffer.writeString(left + x, top, border.h, bs);
-  }
-  buffer.writeString(left + width - 1, top, border.tr, bs);
+  if (drawTop) {
+    if (drawLeft) buffer.writeString(left, top, border.tl, bs);
+    const startX = drawLeft ? 1 : 0;
+    const endX = drawRight ? width - 1 : width;
+    for (let x = startX; x < endX; x++) {
+      buffer.writeString(left + x, top, border.h, bs);
+    }
+    if (drawRight) buffer.writeString(left + width - 1, top, border.tr, bs);
 
-  // Title (left)
-  if (props.title && width > 4) {
-    const title = ` ${props.title} `;
-    const maxLen = Math.min(title.length, width - 4);
-    buffer.writeString(left + 2, top, title.slice(0, maxLen), { bold: true, bg: props.bg });
-  }
+    // Title (left)
+    if (props.title && width > 4) {
+      const title = ` ${props.title} `;
+      const maxLen = Math.min(title.length, width - 4);
+      buffer.writeString(left + 2, top, title.slice(0, maxLen), { bold: true, bg: props.bg });
+    }
 
-  // Title (right)
-  if (props.titleRight && width > 4) {
-    const title = ` ${props.titleRight} `;
-    const maxLen = Math.min(title.length, width - 4);
-    const startX = left + width - 2 - maxLen;
-    buffer.writeString(startX, top, title.slice(0, maxLen), { dim: true, bg: props.bg });
+    // Title (right)
+    if (props.titleRight && width > 4) {
+      const title = ` ${props.titleRight} `;
+      const maxLen = Math.min(title.length, width - 4);
+      const startTitleX = left + width - 2 - maxLen;
+      buffer.writeString(startTitleX, top, title.slice(0, maxLen), { dim: true, bg: props.bg });
+    }
   }
 
   // Side borders
-  for (let y = 1; y < height - 1; y++) {
-    buffer.writeString(left, top + y, border.v, bs);
-    buffer.writeString(left + width - 1, top + y, border.v, bs);
+  const startY = drawTop ? 1 : 0;
+  const endY = drawBottom ? height - 1 : height;
+  for (let y = startY; y < endY; y++) {
+    if (drawLeft) buffer.writeString(left, top + y, border.v, bs);
+    if (drawRight) buffer.writeString(left + width - 1, top + y, border.v, bs);
   }
 
   // Bottom border
-  buffer.writeString(left, top + height - 1, border.bl, bs);
-  for (let x = 1; x < width - 1; x++) {
-    buffer.writeString(left + x, top + height - 1, border.h, bs);
+  if (drawBottom) {
+    if (drawLeft) buffer.writeString(left, top + height - 1, border.bl, bs);
+    const startX = drawLeft ? 1 : 0;
+    const endX = drawRight ? width - 1 : width;
+    for (let x = startX; x < endX; x++) {
+      buffer.writeString(left + x, top + height - 1, border.h, bs);
+    }
+    if (drawRight) buffer.writeString(left + width - 1, top + height - 1, border.br, bs);
   }
-  buffer.writeString(left + width - 1, top + height - 1, border.br, bs);
 }
